@@ -1,24 +1,32 @@
+from fastapi import HTTPException
+from app.schemas import CreateWalletRequest
+from app.repository import wallets as wallets_repository
+
 def get_wallet(wallet_name: str | None):
     if wallet_name is None:
-        return {"total_balance": sum(BALANCE.values())}
-    if wallet_name not in BALANCE:
+        wallets = wallets_repository.get_all_wallets()
+        return {"total balance": sum(wallets.values())}
+
+    if not wallets_repository.is_wallet_exists(wallet_name):
         raise HTTPException(
             status_code=404,
             detail=f"Wallet '{wallet_name}' is not found"
         )
     
-    return {"wallet": wallet_name, "balance": BALANCE[wallet_name]}
+    balance = wallets_repository.get_wallet_balance_by_name(wallet_name)
+    return {"wallet": wallet_name, "balance": balance}
 
 def create_wallet(wallet: CreateWalletRequest):
-    if wallet.name in BALANCE:
+    if wallets_repository.is_wallet_exists(wallet.name):
         raise HTTPException(
             status_code=400,
             detail=f"Wallet '{wallet.name}' already exists"
         )
+    
+    new_balance = wallets_repository.create_wallet(wallet.name, wallet.initial_balance)
 
-    BALANCE[wallet.name] = wallet.initial_balance
     return {
         "message": f"Wallet '{wallet.name}' created",
         "wallet": wallet.name,
-        "balance": BALANCE[wallet.name]
+        "balance": new_balance
     }

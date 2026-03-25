@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPExceprion
+from fastapi import APIRouter 
 
 from app.schemas import OperationRequest
 from app.service import operations as operations_service
