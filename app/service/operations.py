@@ -15,6 +15,8 @@ def add_income(operation: OperationRequest):
         
         wallet = wallets_repository.add_income(db, operation.wallet_name, operation.amount)
 
+        db.commit()
+
         return {
             "message": "Income added",
             "wallet": operation.wallet_name,
@@ -47,6 +49,8 @@ def add_expense(operation: OperationRequest):
                 detail = f"Insufficient founds. Available {wallet.balance} "
             )
         wallet = wallets_repository.add_expense(db, operation.wallet_name, operation.amount)
+
+        db.commit()
 
         return {
             "message": "Expense added",

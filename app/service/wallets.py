@@ -27,17 +27,17 @@ def create_wallet(wallet: CreateWalletRequest):
     db = SessionLocal()
     try:
         if wallets_repository.is_wallet_exists(db, wallet.name):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Wallet '{wallet.name}' already exists"
-            )
+            raise HTTPException(status_code=400, detail=f"Wallet '{wallet.name}' already exists")
         
         wallet = wallets_repository.create_wallet(db, wallet.name, wallet.initial_balance)
-
+        
+        db.commit()
+        
         return {
             "message": f"Wallet '{wallet.name}' created",
             "wallet": wallet.name,
             "balance": wallet.balance
         }
+    
     finally:
         db.close()
