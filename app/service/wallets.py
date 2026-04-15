@@ -1,9 +1,9 @@
 from fastapi import HTTPException
-from app.schemas import CreateWalletRequest
-from app.repository import wallets as wallets_repository
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.models import User
+from app.repository import wallets as wallets_repository
+from app.schemas import CreateWalletRequest
 
 
 def get_wallet(db: Session, wallet_name: str | None):
