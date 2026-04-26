@@ -17,6 +17,6 @@ def add_income(operation: OperationRequest, db: Session = Depends(get_db),
     return operations_service.add_income(db, current_user, operation)
 
 @router.post("/operations/expense")
-def add_expense(operation, OperationRequest, db: Session = Depends(get_db),
+def add_expense(operation: OperationRequest, db: Session = Depends(get_db),
                 current_user: User = Depends(get_current_user)):
     return operations_service.add_expense(db, current_user, operation)
